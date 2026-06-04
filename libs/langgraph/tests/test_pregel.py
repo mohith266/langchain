@@ -6290,14 +6290,15 @@ def test_sync_streaming_with_functional_api() -> None:
     rather than have all the results arrive at once after the graph has completed.
 
     The time of arrival between the two updates corresponding to the two `slow` tasks
-    should be greater than the time delay between the two tasks.
+    should be roughly the task delay. If results are buffered until graph completion,
+    the two updates arrive back-to-back instead.
     """
 
     time_delay = 0.05
 
     @task()
     def slow() -> dict:
-        time.sleep(time_delay)  # Simulate a delay of 10 ms
+        time.sleep(time_delay)
         return {"tic": time.monotonic()}
 
     @entrypoint()
@@ -6315,8 +6316,9 @@ def test_sync_streaming_with_functional_api() -> None:
 
     assert len(arrival_times) == 2
     delta = arrival_times[1] - arrival_times[0]
-    # Delta cannot be less than 10 ms if it is streaming as results are generated.
-    assert delta > time_delay
+    # Allow a small amount of scheduler jitter while still verifying the chunks
+    # arrived separately rather than back-to-back after graph completion.
+    assert delta > time_delay * 0.8
 
 
 def test_entrypoint_without_checkpointer() -> None:

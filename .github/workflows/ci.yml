@@ -23,7 +23,7 @@ jobs:
       python: ${{ steps.filter.outputs.python }}
       sdk-js: ${{ steps.filter.outputs.sdk-js }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -94,7 +94,7 @@ jobs:
     name: "Check SDK methods matching"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -112,7 +112,7 @@ jobs:
         python-version:
           - "3.11"
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: astral-sh/setup-uv@v6
         with:
@@ -157,7 +157,7 @@ jobs:
       run:
         working-directory: ${{ matrix.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Node.js (LTS)
         uses: actions/setup-node@v4
         with:
@@ -183,7 +183,7 @@ jobs:
       run:
         working-directory: ${{ matrix.working-directory }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Node.js (LTS)
         uses: actions/setup-node@v4
         with:
